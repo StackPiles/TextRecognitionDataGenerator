@@ -1,3 +1,4 @@
+import re
 import random as rnd
 import string
 from typing import List
@@ -63,7 +64,12 @@ def create_strings_from_wikipedia(
 
     while len(sentences) < count:
         page_content = get_random_page_content()
-        processed_content = page_content.replace("\n", " ").split(". ")
+        if lang == 'ja':
+            processed_content = re.split('[、。]', page_content.replace("\n", " "))
+            # 。や、を含めたい場合
+            # processed_content = re.split('_\s', page_content.replace("\n", " ").replace('。', '。_ ').replace('、', '、_ '))
+        else:
+            processed_content = page_content.replace("\n", " ").split(". ")
         sentence_candidates = [
             s.strip() for s in processed_content if len(s.split()) > minimum_length
         ]
